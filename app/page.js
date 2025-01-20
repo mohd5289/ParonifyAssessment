@@ -1,101 +1,74 @@
+"use client";
 import Image from "next/image";
+import { Nunito } from "@next/font/google";
+import { useState } from "react";
+
+const nunito = Nunito({
+  subsets: ["latin"], // Define the character subsets you need
+  weight: ["400", "700"], // Specify the weights you want to include
+});
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [selectedMood, setSelectedMood] = useState(""); // State to track the selected mood
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  // Function to handle the image click and set the selected mood
+  const handleMoodSelect = (mood) => {
+    setSelectedMood(mood);
+  };
+  return (
+    <div
+      className={`bg-white text-black flex justify-around items-center m-auto h-screen  ${nunito.className}`}
+    >
+      <div className="flex w-[464px] h-[577px] text-center flex-col border text-[#898583] rounded-lg items-center justify-center gap-4">
+        <Image src="/cat.svg" width={94} height={79} />
+        <h2 className="text-3xl font-bold max-w-[284px]">
+          What is your cat&apos;s current mood?
+        </h2>
+        <div className="flex gap-2 px-4 py-2">
+          <div
+            className="rounded-full w-[55px] h-[55px] bg-[#EFEEEE] flex items-center justify-center"
+            onClick={() => handleMoodSelect("sad")}
           >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <Image src="/sad.png" width={30} height={30} />
+          </div>
+          <div
+            className="rounded-full w-[55px] h-[55px] bg-[#EFEEEE] flex items-center justify-center"
+            onClick={() => handleMoodSelect("sober")}
           >
-            Read our docs
-          </a>
+            <Image src="/sober.png" width={30} height={30} />
+          </div>
+          <div
+            className="rounded-full w-[55px] h-[55px] bg-[#EFEEEE] flex items-center justify-center"
+            onClick={() => handleMoodSelect("happy")}
+          >
+            <Image src="/happy.png" width={30} height={30} />
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        {selectedMood && (
+          <p className="text-[#898583] mt-2">
+            {selectedMood === "sad" && "Cat wasn't having it!"}
+            {selectedMood === "sober" && "Cat was indifferent!"}
+            {selectedMood === "happy" && "Cat was super exited!"}
+          </p>
+        )}
+        <button className="flex items-center justify-center text-white bg-[#EFEEEE] w-[136px] h-[41px] mt-8 ">
+          Save mood
+        </button>
+      </div>
+
+      <div className="flex flex-col justify-start items-center w-[345px] h-[393px] gap-2 text-center">
+        <div className="flex gap-2">
+          <Image src="/smallCat.svg" width={49} height={41} />
+          <h2 className="font-bold text-2xl">Cat mood tracker™</h2>
+        </div>
+        <h2 className="font-extralight text-[#35100C80]">MOOD HISTORY</h2>
+        <div className="mt-10 border-0.5 flex flex-col items-center justify-center w-[345px] h-[264px] gap-2">
+          <Image src="/catLight.svg" width={72} height={61} />
+          <p className="text-[#35100C80] max-w-[120px]">
+            No mood history to show yet
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
