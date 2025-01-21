@@ -10,10 +10,30 @@ const nunito = Nunito({
 
 export default function Home() {
   const [selectedMood, setSelectedMood] = useState(""); // State to track the selected mood
-
+  const [showMoodHistory, setShowMoodHistory] = useState(true);
+  const [moodHistory, setMoodHistory] = useState([]);
   // Function to handle the image click and set the selected mood
   const handleMoodSelect = (mood) => {
     setSelectedMood(mood);
+  };
+  const handleSaveMood = () => {
+    if (selectedMood) {
+      // Move the matching mood to the top of the mood history
+      const moodImages = {
+        sad: "/Angry.png",
+        sober: "/Indifferent.png",
+        happy: "/Excited.png",
+      };
+
+      const updatedMoodHistory = [
+        { mood: selectedMood, image: moodImages[selectedMood] },
+        ...moodHistory.filter((item) => item.mood !== selectedMood),
+      ];
+      setMoodHistory(updatedMoodHistory);
+
+      // Reset to initial state
+      setSelectedMood("");
+    }
   };
   return (
     <div
@@ -51,7 +71,12 @@ export default function Home() {
             {selectedMood === "happy" && "Cat was super exited!"}
           </p>
         )}
-        <button className="flex items-center justify-center text-white bg-[#EFEEEE] w-[136px] h-[41px] mt-8 ">
+        <button
+          className={`flex items-center justify-center text-white w-[136px] h-[41px] mt-8 ${
+            selectedMood ? "bg-black" : "bg-[#EFEEEE]"
+          }`}
+          onClick={handleSaveMood}
+        >
           Save mood
         </button>
       </div>
@@ -62,12 +87,26 @@ export default function Home() {
           <h2 className="font-bold text-2xl">Cat mood tracker™</h2>
         </div>
         <h2 className="font-extralight text-[#35100C80]">MOOD HISTORY</h2>
-        <div className="mt-10 border-0.5 flex flex-col items-center justify-center w-[345px] h-[264px] gap-2">
-          <Image src="/catLight.svg" width={72} height={61} />
-          <p className="text-[#35100C80] max-w-[120px]">
-            No mood history to show yet
-          </p>
-        </div>
+        {moodHistory.length === 0 ? (
+          <div className="mt-10 border-0.5 flex flex-col items-center justify-center w-[345px] h-[264px] gap-2">
+            <Image src="/catLight.svg" width={72} height={61} />
+            <p className="text-[#35100C80] max-w-[120px]">
+              No mood history to show yet
+            </p>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-2">
+            {moodHistory.map((item, index) => (
+              <Image
+                key={index}
+                src={item.image}
+                width={479}
+                height={87}
+                alt={`${item.mood} mood`}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
